@@ -100,11 +100,9 @@ end
 addpath('..\MatlabFilterDesignApp')
 % [strNetlist] = funSynthesisFilter(fType, TeeEn, n, Rs, Rl, fp, fs, Ap, Apr, Asr, bw, fShape);
 % [strNetlist] = funSynthesisTransAndGenNetlist2(fType, fShape, TeeEn, n, Rs, Rl, fp, bw, cellValueNetlist);
-RS = 50;
-RL = 50;
 strNetlistHeader = {
     'V0 V 1 0 1';
-    sprintf('RS R 1 2 %f',  RS);
+    'RS R 1 2 50';sprintf('RS R 1 2 50%f',Nset+2, RL);
 };
 strNetlistTail = {
     sprintf('RL R %d 0 %f',Nset+2, RL);
