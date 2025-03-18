@@ -10,16 +10,18 @@
 %--------------------------------------------------------------------------
 %     
 N = 3;
-m = 0.01*2*pi;
-n = 100*2*pi;
-delta = 3;
-c = delta/log10(n/m);
+m = 0.01;
+n = 100;
+c = 10;
 maxIter = 20;
 tol = 1e-6;
-[aSol,wSol,deltaSol,xSol] = funRemezEquirippleRational(N, m, n, c, maxIter, tol, 0);
-[A, W, delta] = funGetFullPara([aSol;wSol;0], sqrt(m*n), N);
+[aSol,wSol,deltaSol,xSol] = funRemezEquirippleRational(N, m, n, c, maxIter, tol, 7);
+[A, W, delta] = funGetFullPara([axc0';Wc.*10.^(wxc0'*Rset/2);0], sqrt(m1*n1), Nset);
+
+A = aSol;
+W = wSol;
 Slope = 0;% 0:Positive Slope;1:Negative Slope
 Type = 1;% netlist:0,zobel network, 1,RC/RL Serial, 2, RC/RL Parallel
-funGenSchAndSim(A, W, Rs, Slope, Type, m/2/pi, n/2/pi);
+funGenSchAndSim(A, W, Rs, Slope, Type, m, n);
 
 
