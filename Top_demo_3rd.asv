@@ -66,6 +66,17 @@ Li = 50./wi
 R2in1=50.*(Ki-1)./(Ki+1)
 R2i=100.*Ki./(Ki.^2-1)
 
+syms s
+n1 = double(vpa(coeffs(expand((s+a2)*(s+a1)*(s+a3))),10));
+d1 = double(vpa(coeffs(expand((s+b2)*(s+b1)*(s+b3))),10));
+% [r,p,k]=residue(100*fliplr(n1),fliplr(d1))
+[r,p,k]=residue(2*fliplr(n1)-fliplr(d1),50*fliplr(d1))
+% 1/(R+s*L),1/(a*s+b)=L//R-->1/(1/R+1/(sL))=sL/(sL/R+1),L+R-->sL+R, C//R-->1/(1/R+sC) 
+% 100+98.01/(x+6.15)=100+1/(x/98.1+6.15/98.1)=100+1/(0.01s+1/15.95)
+
+
+r2 = r*100;
+
 w = logspace(-2,2,1000);
 % syms w real
 s = 1i.*w;

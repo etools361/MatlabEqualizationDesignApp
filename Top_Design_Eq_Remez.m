@@ -9,14 +9,14 @@
 %   tol     : Convergence threshold (for changes in delta or x_i)
 %--------------------------------------------------------------------------
 %     
-N = 3;
+N = 4;
 m = 0.01*2*pi;
 n = 100*2*pi;
 delta = 3;
 c = delta/log10(n/m);
 maxIter = 20;
 tol = 1e-6;
-[aSol,wSol,deltaSol,xSol] = funRemezEquirippleRational(N, m, n, c, maxIter, tol, 0);
+[aSol,wSol,deltaSol,xSol] = funRemezEquirippleRational(N, m, n, c, maxIter, tol, 7);
 [A, W, delta] = funGetFullPara([aSol;wSol;0], sqrt(m*n), N);
 Slope = 0;% 0:Positive Slope;1:Negative Slope
 Type = 1;% netlist:0,zobel network, 1,RC/RL Serial, 2, RC/RL Parallel
