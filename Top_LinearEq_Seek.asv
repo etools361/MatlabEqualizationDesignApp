@@ -1,0 +1,60 @@
+N = 3;      % 项数
+% m = 0.025;      % 区间左端点
+% n = 0.55;      % 区间右端点
+c = 10;    % 目标中心值
+tol = 1e-6; % 收敛容差
+max_iter = 50; % 最大迭代次数
+
+% 调用函数
+% [delta, A, W, x_points] = funRemezEquirippleRational_linefreq(N, m, n, c, tol, max_iter);
+kT = linspace(1.1,10,100);
+nn = length(kT);
+deltaT=[];
+AT    =[];
+WT    =[];
+for ii=1:nn
+    A_set = A;
+    W_set = W;
+    delta_set = delta;
+    k = kT(ii);
+    p = 1/k*0.9;
+    m = 1/k*p;      % 区间左端点
+    n = k*p;      % 区间右端点
+    [delta, A, W, x_points] = funRemezEquirippleRational_linefreq(N, m, n, c, tol, max_iter, A_set, W_set,delta_set, 0);
+    deltaT(ii) = delta;
+    AT(ii,:) = A;
+    WT(ii,:) = W;
+    plot(kT(1:ii), deltaT(1:ii), '-r', 'linewidth', 2);
+    grid on;
+    drawnow;
+end
+AT1 = AT(:,1);
+AT2 = AT(:,2);
+AT3 = AT(:,3);
+
+% AT3
+% p1 =        6.79;
+% p2 =       48.02;
+% p3 =      -35.46;
+% q1 =       12.49;
+% q2 =      -9.164;
+syms x;
+r = vpa(solve(x^2 + q1*x + q2==0),4)
+r = vpa(solve(p1*x^2 + p2*x + p3==0),4)
+cAT3_5  = [ -13.19,  0.695, -7.746, 0.6742];
+cAT3_10 = [ -83.48, 0.9833, -0.5753, 0.9678];
+cAT3_10 = [ ];
+       p1 =       671.6
+       p2 =        2757
+       p3 =        2771
+       q1 =       35.89
+       q2 =       59.77  (58.61, 60.93)
+% AT2
+cAT2_5  = [ -7.718, 0.5686, -1.24, 0.494];
+cAT2_10 = [ -10.46, 0.9431, -3.072,  0.939];
+cAT2_10 = [ -6.138, -1.766, -3.307, -1.768];
+% AT1
+% c=5
+cAT1_5  = [ -10.08, 0.7222, -2.911, 0.6981];
+cAT1_10 = [ -95.74, 0.9519, 0.6608, 0.834];
+cAT1_10 = [ -34.14 -1.751, -2.348, -1.758];

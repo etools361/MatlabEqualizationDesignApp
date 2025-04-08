@@ -34,12 +34,9 @@ max_iter = 500; % 最大迭代次数
 
 % 调用函数
 [delta, A, W, x_points] = funRemezEquirippleRational_linefreq(N, m, n, c, tol, max_iter);
-% 0.01,0.026,0.056,0.084,0.118,0.21,0.264,0.797,0.945
-% 2.40,1.653,1.533,1.824,1.564,2.04,1.847,4.389,4.329
-
 A_set = [];
 W_set = [];
-delta_set = 0.001;
+delta_set = 0.01;
 [delta, A, W, x_points] = funRemezEquirippleRational_linefreq(N, m, n, c, tol, max_iter, A_set, W_set,delta_set);
 
 semilogx(W,A,'-*', 'linewidth', 2);grid on;
