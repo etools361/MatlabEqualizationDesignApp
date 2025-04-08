@@ -4,12 +4,12 @@ fl = 1e6;
 fh = 1e9;
 f1=0.9*fl/fh;
 delta = 3;
+N = 3;
 
 m = f1; % 区间左端点
 n = 0.9;
 k=fh/n;
 c = delta/(n-m);       % 目标中心值
-N = 4;
 tol = 1e-10; % 收敛容差
 max_iter = 100; % 最大迭代次数
 
@@ -100,11 +100,18 @@ x0 = linspace(fl,fh,10000);
 [val, x] =  funEvalLinearEq(A0./k, W0.*k, x0, 0);
 % hold on;
 % plot(x(1:end-1), diff(val)./diff(x), '-b', 'linewidth', 2);
+figure(1);
 plot(x, val, '-b', 'linewidth', 2);
 xlabel('Freq/Hz');
-ylabel('Mag/dB');
+ylabel('H_{dB}/dB');
 % semilogx(x(1:end-1), diff(val)./diff(x), '-b', 'linewidth', 2);
 grid on;
+figure(2);
+semilogx(x(1:end-1), diff(val)./diff(x), '-b', 'linewidth', 2);
+xlabel('Freq/Hz');
+ylabel('dH/df');
+grid on;
+
 % hold off
 toc;
 
