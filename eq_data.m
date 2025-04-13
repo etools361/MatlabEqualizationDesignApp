@@ -1,4 +1,5 @@
-function [wTabNxC2, wTabNxC5, wTabNxC8, wTabNxC10] = eq_data()
+function [DataAll, C0] = eq_data()
+C0 = [2,5,8,10];
 wTabNxC2 = {
 [
 0.000,0.000,-0.000,0.000,0.000,-0.000,0.000,0.000,-0.000;
@@ -407,3 +408,4 @@ wTabNxC10 = {
 6.905,7.001,7.144,7.358,7.677,8.153,8.854,9.859,11.229;
 ];
 };
+DataAll = {wTabNxC2, wTabNxC5, wTabNxC8, wTabNxC10};

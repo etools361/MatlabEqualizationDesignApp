@@ -1,4 +1,4 @@
-function [delta, A, W, x_points, Err] = funRemezEquirippleRational_linefreq(N, m, n, c, tol, max_iter, a_guess, w_guess, delta_guess, dispEn)
+function [delta, A, W, x_points, Err] = funRemezEquirippleRational_linefreq(N, m, n, c, tol, max_iter, a_guess, w_guess, delta_guess, x_points, dispEn)
     if nargin<7
         a_guess  = c.*(1:N)./N; % A的初始猜测
     end
@@ -9,11 +9,13 @@ function [delta, A, W, x_points, Err] = funRemezEquirippleRational_linefreq(N, m
         delta_guess = 0.1 * c/N; % 初始delta猜测
     end
     if nargin<10
+        x_points = logspace(log10(m), log10(n), 2*N+1);%1,3;2,5;3,7
+    end
+    if nargin<11
         dispEn = 1;
     end
     xFix = 0;
     % 参数初始化
-    x_points = logspace(log10(m), log10(n), 2*N+1);%1,3;2,5;3,7
     for iter = 1:max_iter
         p0 = [a_guess,w_guess,delta_guess];
         % 求解方程组以获得新的参数
@@ -27,7 +29,7 @@ function [delta, A, W, x_points, Err] = funRemezEquirippleRational_linefreq(N, m
         x_samples = logspace(log10(m), log10(n), 1000);
         val = funCalcY_Linear(A, W, x_samples);
         if dispEn
-            plot(x_samples, val, '-r', 'linewidth', 2);grid on;
+            semilogx(x_samples, val, '-r', 'linewidth', 2);grid on;
     %         hold on;
     %         x_samples = linspace(0, 1, 1000);
     %         val = funCalcY_Linear(A, W, x_samples);
@@ -91,7 +93,8 @@ end
 
 function [pSol, resNorm, exitflag] = solveSystemRemez(p0, xPoints, c, N)
     eqFun = @(p) systemEquations(p, xPoints, c, N);
-    options = optimoptions('fsolve', 'Display', 'off', 'TolFun', 1e-14, 'TolX', 1e-14);
+    options = optimoptions('fsolve', 'Algorithm', 'levenberg-marquardt', 'Display', 'off','TolX', 1e-14,'StepTolerance', 1e-12);
+%     options = optimoptions('fsolve', 'Display', 'off','TolX', 1e-14,'StepTolerance', 1e-12);
     [pSol, ~, exitflag, output] = fsolve(eqFun, p0, options);
 %     [pSol, ~, exitflag] = my_newton_method(eqFun, p0, 1e-7, 200);
     %4.5167    2.8015    2.4127    2.3117    2.3074    2.3662    2.5423    3.0935    9.1160
@@ -112,16 +115,18 @@ function F = systemEquations(p, xPoints, c, N)
         xi = xPoints(i);
         yVal = funCalcY_Linear(A, W, xi);
         if mod(i, 2) == 0
-            F(i) = yVal - (c + delta);
+            F(i) = (yVal - (c + delta))^2;
         else
-            F(i) = yVal - (c - delta);
+            F(i) = (yVal - (c - delta))^2;
         end
     end
+%     F = fliplr(F);
+%     resNorm = norm(F, 2);
 end
 
 function [new_x, randx] = find_new_extremes(m, n, a, b, c, delta, N)
     % 寻找导数为零的点
-    x_samples = logspace(log10(m), log10(n), 1000);
+    x_samples = logspace(log10(m), log10(n), 100000);
     e = funCalcY_Linear(a, b, x_samples) - c;
     
     % 寻找极大值和极小值
@@ -143,6 +148,9 @@ function [new_x, randx] = find_new_extremes(m, n, a, b, c, delta, N)
             [maxCand, iCnad] = max(diff(log10(candidates)));
             candidates = [candidates(1:iCnad),sqrt(candidates(1+iCnad)*candidates(iCnad)),candidates(1+iCnad:end)];
         end
+%         deviation = 0.01; % 1% 的偏差
+%         random_factor = 1 + deviation * (2 * rand(2*N+1) - 1);
+%         candidates = logspace(log10(m), log10(n), 2*N+1).*random_factor;
         randx = 1;
         new_x = candidates;
     else
